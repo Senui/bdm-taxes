@@ -16,19 +16,29 @@
 
 #include "biodynamo.h"
 
+#include "agent/company.h"
+#include "agent/consumer.h"
+#include "initialization.h"
+#include "sim_param.h"
+
 namespace bdm {
 
 inline int Simulate(int argc, const char** argv) {
+  Param::RegisterParamGroup(new SimParam());
   Simulation simulation(argc, argv);
 
-  // Define initial model - in this example: single cell at origin with a
-  // diameter of 30.0 (no unit associated).
-  auto* rm = simulation.GetResourceManager();
-  auto* cell = new Cell(30.0);
-  rm->AddAgent(cell);
+  InitializeAgents();
 
-  // Run simulation for one timestep
-  simulation.GetScheduler()->Simulate(1);
+  auto* rm = simulation.GetResourceManager();
+  std::cout << "Number of agents = " << rm->GetNumAgents() << std::endl;
+
+  rm->ForEachAgent([&](Agent* a) {  // NOLINT
+    if (auto* company = dynamic_cast<Company*>(a)) {
+      std::cout << " > " << company->name_ << ", ";
+      std::cout << company->income_ << ", ";
+      std::cout << company->location_ << std::endl;
+    }
+  });
 
   std::cout << "Simulation completed successfully!" << std::endl;
   return 0;

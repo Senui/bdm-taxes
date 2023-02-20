@@ -29,6 +29,10 @@ include_directories("src")
 file(GLOB_RECURSE PROJECT_HEADERS src/*.h)
 file(GLOB_RECURSE PROJECT_SOURCES src/*.cc)
 
+add_definitions(-DDATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data\\"")
+add_definitions(-D_LIBCPP_NO_EXPERIMENTAL_DEPRECATION_WARNING_FILESYSTEM=1)
+
+
 bdm_add_executable(${CMAKE_PROJECT_NAME}
                    HEADERS ${PROJECT_HEADERS}
                    SOURCES ${PROJECT_SOURCES}

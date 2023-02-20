@@ -11,10 +11,26 @@
 // regarding copyright ownership.
 //
 // -----------------------------------------------------------------------------
-#include "bdm-taxes.h"
+#ifndef COMPANY_H_
+#define COMPANY_H_
 
-using namespace bdm;
+#include "agent/shapeless_agent.h"
 
-const ParamGroupUid SimParam::kUid = ParamGroupUidGenerator::Get()->NewUid();
+namespace bdm {
 
-int main(int argc, const char** argv) { return Simulate(argc, argv); }
+class Company : public ShapelessAgent {
+  BDM_AGENT_HEADER(Company, ShapelessAgent, 1);
+
+ public:
+  Company(real_t income = 0.0, const std::string& name = "",
+          const std::string& location = "")
+      : income_(income), name_(name), location_(location) {}
+
+  real_t income_;
+  std::string name_;
+  std::string location_;
+};
+
+}  // namespace bdm
+
+#endif  // COMPANY_H_
